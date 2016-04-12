@@ -15,7 +15,7 @@ class HashClient(object):
     def __init__(
         self,
         servers,
-        hasher=RendezvousHash,
+        hasher=RendezvousHash(),
         serializer=None,
         deserializer=None,
         connect_timeout=None,
@@ -36,9 +36,8 @@ class HashClient(object):
 
         Args:
           servers: list(tuple(hostname, port))
-          hasher: optional class three functions ``get_node``, ``add_node``,
+          hasher: object implementing functions ``get_node``, ``add_node``,
                   and ``remove_node``
-                  defaults to Rendezvous (HRW) hash.
 
           use_pooling: use py:class:`.PooledClient` as the default underlying
                        class. ``max_pool_size`` and ``lock_generator`` can
@@ -69,8 +68,8 @@ class HashClient(object):
         self._failed_clients = {}
         self._dead_clients = {}
         self._last_dead_check_time = time.time()
-
-        self.hasher = hasher()
+        
+        self.hasher = hasher
 
         self.default_kwargs = {
             'connect_timeout': connect_timeout,
