@@ -18,7 +18,7 @@ setup(
     author='Charles Gordon',
     author_email='charles@pinterest.com',
     packages=find_packages(),
-    install_requires=['six'],
+    install_requires=['six', 'sortedcontainers'],
     description='A comprehensive, fast, pure Python memcached client',
     long_description=readme + '\n' + changelog,
     license='Apache License 2.0',
