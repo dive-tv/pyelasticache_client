@@ -1,11 +1,6 @@
 import sys
 
-sys.path.append('../client')
-
-from consistenthasher import ConsistentHash
-
-#from pymemcache.client.consistenthasher import ConsistentHash
-#from pymemcache.client.hash import HashClient
+from pymemcache.client.consistenthasher import ConsistentHash
 
 NUM_KEYS = 10
 NUM_RESULTS = 5

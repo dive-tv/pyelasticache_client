@@ -1,8 +1,6 @@
 import sys
-sys.path.append('.')
-from ketama import ketama
 
-#from pymemcache.client.ketama import ketama
+from pymemcache.client.ketama import ketama
 from sortedcontainers import SortedDict
 
 class ConsistentHash(object):
