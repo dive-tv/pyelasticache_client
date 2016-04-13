@@ -5,7 +5,7 @@ from pymemcache.client.consistenthasher import ConsistentHash
 NUM_KEYS = 10
 NUM_RESULTS = 5
 
-def test_hasher():
+def hash_keys(hasher):
 
     print(len(hasher.get_nodes()))
     
@@ -15,37 +15,90 @@ def test_hasher():
     return res
 
 
-#client = HashClient(servers = [('172.31.0.1', 3000), ('172.31.0.2', 3000)],
-#         hasher = ConsistentHash())
-         
-hasher = ConsistentHash()
-results = []
+def test():
+            
+    hasher = ConsistentHash()
+    results = []
 
-results.append(test_hasher())
-
-for i in range(1,11):
-    node = '172.31.0.%i' % i + ':3000'
-    hasher.add_node(node)
-
-results.append(test_hasher())
+    # no nodes
+    ###########
     
-for i in range(1,6):
-    node = '172.31.0.%i' % i + ':3000'
-    hasher.remove_node(node)
+    results.append(hash_keys(hasher))
 
-results.append(test_hasher())
+    # all keys return None
+    for i in range(0, NUM_RESULTS):
+        assert results[0][i] is None
 
-for i in range(1,6):
-    node = '172.31.0.%i' % i + ':3000'
-    hasher.add_node(node)
+    # add 10 nodes
+    ###########
+    
+    for i in range(1,11):
+        node = '172.31.0.%i' % i + ':3000'
+        hasher.add_node(node)
 
-results.append(test_hasher())
+    results.append(hash_keys(hasher))
 
-for i in range(6,11):
-    node = '172.31.0.%i' % i + ':3000'
-    hasher.remove_node(node)
+    # no keys return None
+    for i in range(0, NUM_RESULTS):
+        assert results[1][i] is not None
+    
+    # remove first 5 nodes
+    ###########
+    
+    for i in range(1,6):
+        node = '172.31.0.%i' % i + ':3000'
+        hasher.remove_node(node)
 
-results.append(test_hasher())
+    results.append(hash_keys(hasher))
 
-for test in range(0, NUM_RESULTS):
-    print (results[test])
+    # keys on deleted nodes change assigned node
+    # keys on kept nodes keep same node
+    for i in range(0, NUM_RESULTS):
+        init_node = int(results[1][i][9:10])
+        curr_node = int(results[2][i][9:10])
+        if init_node in range(1,6):
+            assert init_node != curr_node
+        elif init_node in range(6,11):
+            assert init_node == curr_node
+    
+    # add removed nodes again
+    ###########
+    
+    for i in range(1,6):
+        node = '172.31.0.%i' % i + ':3000'
+        hasher.add_node(node)
+
+    results.append(hash_keys(hasher))
+
+    # all keys go back to initial node assignments
+    for i in range(0, NUM_RESULTS):
+        init_node = int(results[1][i][9:10])
+        curr_node = int(results[3][i][9:10])
+        assert init_node == curr_node
+            
+    
+    # remove last 5 nodes
+    ###########
+    
+    for i in range(6,11):
+        node = '172.31.0.%i' % i + ':3000'
+        hasher.remove_node(node)
+
+    results.append(hash_keys(hasher))
+
+    # keys on deleted nodes change assigned node
+    # keys on kept nodes keep same node
+    for i in range(0, NUM_RESULTS):
+        init_node = int(results[1][i][9:10])
+        curr_node = int(results[4][i][9:10])
+        if init_node in range(1,6):
+            assert init_node == curr_node
+        elif init_node in range(6,11):
+            assert init_node != curr_node
+    
+    for test in range(0, NUM_RESULTS):
+        print (results[test])
+
+
+if __name__ == '__main__':
+    test()
