@@ -14,7 +14,7 @@ class HashClient(object):
     """
     def __init__(
         self,
-        servers,
+        servers=[],
         hasher=RendezvousHash,
         serializer=None,
         deserializer=None,
