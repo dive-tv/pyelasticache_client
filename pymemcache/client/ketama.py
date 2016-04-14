@@ -4,7 +4,10 @@ import hashlib
 def ketama(data, h=0):
 
     m = hashlib.md5()
-    m.update(data.encode('utf-8'))
+    if (type(data) is str):
+        m.update(data.encode('utf-8'))
+    else:
+        m.update(data)
     b_key = m.digest()
 
     if (type(b_key[0]) is int):
