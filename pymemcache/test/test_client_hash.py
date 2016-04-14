@@ -24,7 +24,8 @@ class TestHashClient(ClientTestMixin, unittest.TestCase):
 
     def make_client(self, *mock_socket_values, **kwargs):
         current_port = 11012
-        client = HashClient([], hasher=RendezvousHash, **kwargs)
+        
+        client = HashClient(hasher=RendezvousHash, **kwargs)
         ip = '127.0.0.1'
 
         for vals in mock_socket_values:
@@ -125,25 +126,19 @@ class TestHashClient(ClientTestMixin, unittest.TestCase):
         assert result == {}
 
     def test_no_servers_left(self):
-        from pymemcache.client.hash import HashClient
-        client = HashClient(
-            [], use_pooling=True,
+        
+        client = self.make_client(*[], use_pooling=True,
             ignore_exc=True,
-            timeout=1, connect_timeout=1,
-            hasher=hasher
-        )
-
+            timeout=1, connect_timeout=1)
+        
         hashed_client = client._get_client('foo')
         assert hashed_client is None
 
     def test_no_servers_left_raise_exception(self):
-        from pymemcache.client.hash import HashClient
-        client = HashClient(
-            [], use_pooling=True,
+
+        client = self.make_client(*[], use_pooling=True,
             ignore_exc=False,
-            timeout=1, connect_timeout=1,
-            hasher=hasher
-        )
+            timeout=1, connect_timeout=1)
 
         with pytest.raises(Exception) as e:
             client._get_client('foo')
@@ -151,48 +146,41 @@ class TestHashClient(ClientTestMixin, unittest.TestCase):
         assert str(e.value) == 'All servers seem to be down right now'
 
     def test_unavailable_servers_zero_retry_raise_exception(self):
-        from pymemcache.client.hash import HashClient
-        client = HashClient(
-            [('example.com', 11211)], use_pooling=True,
-            ignore_exc=False,
+
+        client = self.make_client(*[],
+            use_pooling=True, ignore_exc=False,
             retry_attempts=0, timeout=1, connect_timeout=1,
-            hasher=hasher
+            servers=[('example.com', 11211)]
         )
 
         with pytest.raises(socket.error) as e:
             client.get('foo')
 
     def test_no_servers_left_with_commands(self):
-        from pymemcache.client.hash import HashClient
-        client = HashClient(
-            [], use_pooling=True,
+
+        client = self.make_client(*[], use_pooling=True,
             ignore_exc=True,
-            timeout=1, connect_timeout=1,
-            hasher=hasher
+            timeout=1, connect_timeout=1
         )
 
         result = client.get('foo')
         assert result is False
 
     def test_no_servers_left_with_set_many(self):
-        from pymemcache.client.hash import HashClient
-        client = HashClient(
-            [], use_pooling=True,
+
+        client = self.make_client(*[], use_pooling=True,
             ignore_exc=True,
-            timeout=1, connect_timeout=1,
-            hasher=hasher
+            timeout=1, connect_timeout=1
         )
 
         result = client.set_many({'foo': 'bar'})
         assert result is False
 
     def test_no_servers_left_with_get_many(self):
-        from pymemcache.client.hash import HashClient
-        client = HashClient(
-            [], use_pooling=True,
+
+        client = self.make_client(*[], use_pooling=True,
             ignore_exc=True,
-            timeout=1, connect_timeout=1,
-            hasher=hasher
+            timeout=1, connect_timeout=1
         )
 
         result = client.get_many(['foo', 'bar'])

@@ -15,7 +15,7 @@ class TestConsistentHashClient(TestHashClient, unittest.TestCase):
         
     def make_client(self, *mock_socket_values, **kwargs):
         current_port = 11012
-        client = HashClient([], hasher=ConsistentHash, **kwargs)
+        client = HashClient(hasher=ConsistentHash, **kwargs)
         ip = '127.0.0.1'
 
         for vals in mock_socket_values:
