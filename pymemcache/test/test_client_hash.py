@@ -9,6 +9,9 @@ import pytest
 import mock
 import socket
 
+from pymemcache.client.rendezvous import RendezvousHash
+
+hasher = RendezvousHash
 
 class TestHashClient(ClientTestMixin, unittest.TestCase):
 
@@ -21,7 +24,7 @@ class TestHashClient(ClientTestMixin, unittest.TestCase):
 
     def make_client(self, *mock_socket_values, **kwargs):
         current_port = 11012
-        client = HashClient([], **kwargs)
+        client = HashClient([], hasher=RendezvousHash, **kwargs)
         ip = '127.0.0.1'
 
         for vals in mock_socket_values:
@@ -38,7 +41,7 @@ class TestHashClient(ClientTestMixin, unittest.TestCase):
 
     def test_setup_client_without_pooling(self):
         with mock.patch('pymemcache.client.hash.Client') as internal_client:
-            client = HashClient([], timeout=999, key_prefix='foo_bar_baz')
+            client = HashClient([], timeout=999, key_prefix='foo_bar_baz', hasher=hasher)
             client.add_server('127.0.0.1', '11211')
 
         assert internal_client.call_args[0][0] == ('127.0.0.1', '11211')
@@ -126,7 +129,8 @@ class TestHashClient(ClientTestMixin, unittest.TestCase):
         client = HashClient(
             [], use_pooling=True,
             ignore_exc=True,
-            timeout=1, connect_timeout=1
+            timeout=1, connect_timeout=1,
+            hasher=hasher
         )
 
         hashed_client = client._get_client('foo')
@@ -137,7 +141,8 @@ class TestHashClient(ClientTestMixin, unittest.TestCase):
         client = HashClient(
             [], use_pooling=True,
             ignore_exc=False,
-            timeout=1, connect_timeout=1
+            timeout=1, connect_timeout=1,
+            hasher=hasher
         )
 
         with pytest.raises(Exception) as e:
@@ -150,7 +155,8 @@ class TestHashClient(ClientTestMixin, unittest.TestCase):
         client = HashClient(
             [('example.com', 11211)], use_pooling=True,
             ignore_exc=False,
-            retry_attempts=0, timeout=1, connect_timeout=1
+            retry_attempts=0, timeout=1, connect_timeout=1,
+            hasher=hasher
         )
 
         with pytest.raises(socket.error) as e:
@@ -161,7 +167,8 @@ class TestHashClient(ClientTestMixin, unittest.TestCase):
         client = HashClient(
             [], use_pooling=True,
             ignore_exc=True,
-            timeout=1, connect_timeout=1
+            timeout=1, connect_timeout=1,
+            hasher=hasher
         )
 
         result = client.get('foo')
@@ -172,7 +179,8 @@ class TestHashClient(ClientTestMixin, unittest.TestCase):
         client = HashClient(
             [], use_pooling=True,
             ignore_exc=True,
-            timeout=1, connect_timeout=1
+            timeout=1, connect_timeout=1,
+            hasher=hasher
         )
 
         result = client.set_many({'foo': 'bar'})
@@ -183,7 +191,8 @@ class TestHashClient(ClientTestMixin, unittest.TestCase):
         client = HashClient(
             [], use_pooling=True,
             ignore_exc=True,
-            timeout=1, connect_timeout=1
+            timeout=1, connect_timeout=1,
+            hasher=hasher
         )
 
         result = client.get_many(['foo', 'bar'])
