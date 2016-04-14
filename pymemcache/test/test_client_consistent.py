@@ -1,6 +1,9 @@
 import sys
 
 from pymemcache.client.consistenthasher import ConsistentHash
+from pymemcache.client.hash import HashClient
+
+from .test_client_hash import TestHashClient
 
 import unittest
 import pytest
@@ -8,8 +11,24 @@ import pytest
 NUM_KEYS = 10
 NUM_RESULTS = 5
 
-class TestConsistentHasher(unittest.TestCase):
+class TestConsistentHashClient(TestHashClient, unittest.TestCase):
+        
+    def make_client(self, *mock_socket_values, **kwargs):
+        current_port = 11012
+        client = HashClient([], hasher=ConsistentHash, **kwargs)
+        ip = '127.0.0.1'
 
+        for vals in mock_socket_values:
+            s = '%s:%s' % (ip, current_port)
+            c = self.make_client_pool(
+                (ip, current_port),
+                vals
+            )
+            client.clients[s] = c
+            client.hasher.add_node(s)
+            current_port += 1
+
+        return client
         
     def hash_keys(self, hasher):
 
