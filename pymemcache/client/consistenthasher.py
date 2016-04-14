@@ -22,7 +22,6 @@ class ConsistentHash(object):
         self.reps = reps
         self.update_continuum()
         
-    # TODO update Ketama continuum tree
     def add_node(self, node):
         if node not in self.nodes:
             self.nodes.append(node)
