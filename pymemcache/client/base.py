@@ -612,6 +612,23 @@ class Client(object):
             raise MemcacheUnknownError("Received unexpected response: %s" % (result, ))
 
         return result[8:]
+        
+        
+    def config(self, type):
+        """
+        The memcached "config" command.
+
+        Returns:
+            The string returned by the config command.
+        """
+        cmd = b"config get %s\r\n" % type
+        result = self._config_cmd(cmd)
+
+        if not result.startswith(b'CONFIG '):
+            raise MemcacheUnknownError("Received unexpected response: %s" % (result, ))
+
+        return result[7:]
+
 
     def flush_all(self, delay=0, noreply=None):
         """
@@ -779,6 +796,36 @@ class Client(object):
             self.close()
             raise
 
+    def _config_cmd(self, cmd):
+
+        try:
+            if not self.sock:
+                self._connect()
+
+            self.sock.sendall(cmd)
+
+            buf = b''
+            result = b''
+            while True:
+                
+                buf, line = _readline(self.sock, buf)
+                self._raise_errors(line, cmd)
+                
+                if line == b'END':
+                    if (result.endswith(b'\n')):
+                        result = result[:-1]
+                    return result
+                elif line.endswith(b'\n'):
+                    result += line
+                else:
+                    result += (line + b'\n')
+                
+        except Exception:
+            self.close()
+            if self.ignore_exc:
+                return {}
+            raise
+            
     def __setitem__(self, key, value):
         self.set(key, value, noreply=True)
 

@@ -330,3 +330,7 @@ class HashClient(object):
     def flush_all(self):
         for _, client in self.clients.items():
             self._safely_run_func(client, client.flush_all, False)
+            
+    def config(self, key, *args, **kwargs):
+        return self._run_cmd('config', key, None, *args, **kwargs)
+        
