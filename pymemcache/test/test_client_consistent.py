@@ -1,5 +1,3 @@
-import sys
-
 from pymemcache.client.consistenthasher import ConsistentHash
 from pymemcache.client.hash import HashClient
 

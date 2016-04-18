@@ -45,6 +45,8 @@ class AutodiscoveryClient(HashClient):
         
         # init cluster params
         self.endpoint = endpoint
+        self.args = args
+        self.kwargs = kwargs
         self.cluster_version = 0
         self.autodiscovery = autodiscovery
         self.interval = interval
@@ -57,15 +59,16 @@ class AutodiscoveryClient(HashClient):
     
         # connect to mgmt node
         # this connection is not kept, as DNS resolution might point to another node
-        mgmt = Client(server=self.endpoint)
+        mgmt = Client(server=self.endpoint, *self.args, **self.kwargs)
         
         # check memcached version and obtain cluster info
         cluster_info = None
-        memcached_version = mgmt.version()
+        memcached_version = mgmt.version().decode()
+        
         if StrictVersion(memcached_version) >= StrictVersion('1.4.14'):
-            cluster_info = mgmt.config('cluster')
+            cluster_info = mgmt.config(b'cluster').decode()
         else:
-            cluster_info = mgmt.get('AmazonElastiCache:cluster')
+            cluster_info = mgmt.get(b'AmazonElastiCache:cluster').decode()
         
         # parse cluster version and nodes
         splitter = re.compile(r'\r?\n')
@@ -87,23 +90,32 @@ class AutodiscoveryClient(HashClient):
         if self.autodiscovery:
             threading.Timer(self.interval, self.check_cluster).start()
         
-        print('Checking cluster nodes..')
+        logger.debug('Checking cluster nodes..')
         
         (new_version, new_nodes) = self.get_cluster_nodes()
         if new_version != self.cluster_version:
             
-            print('Cluster version changed from %i to %i. Reloading nodes..',  
+            logger.info('Cluster version changed from %i to %i. Reloading nodes..',  
                         self.cluster_version, new_version)
             self.cluster_version = new_version
             
             # check removed nodes
+            deleted_nodes = []
             for node in self.clients.keys():
-                if not node in new_nodes:
-                    print('Removing node from cluster: %s',  node)
-                    self.remove_server(node[0], node[1])
+                ip_port = node.split(":")
+                if len(ip_port) == 2 and not (ip_port[0], ip_port[1]) in new_nodes:
+                    logger.info('Removing node from cluster: %s',  node)
+                    deleted_nodes.append(node)
+                    self.remove_server(ip_port[0], ip_port[1])
+            
+            # update client nodes
+            for node in deleted_nodes:
+                del self.clients[node]
             
             # check new nodes
             for node in new_nodes:
-                if not node in self.clients.keys():
-                    print('Adding node to cluster: %s',  node)
+                node_str = node[0] + ":" + node[1]
+                if not node_str in self.clients.keys():
+                    logger.info('Adding node to cluster: %s',  node)
                     self.add_server(node[0], node[1])
+    
