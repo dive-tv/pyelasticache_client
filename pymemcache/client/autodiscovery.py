@@ -13,13 +13,14 @@ import threading
 logger = logging.getLogger(__name__)
 
 
-class AutodiscoveryClient(object):
+class AutodiscoveryClient(HashClient):
     """
     A hashed client implementing memcached cluster autodiscovery feature
     """
     def __init__(
         self,
         endpoint,
+        autodiscovery=True,
         interval=60,
         hasher=ConsistentHash,
         *args,
@@ -30,46 +31,47 @@ class AutodiscoveryClient(object):
 
         Args:
           cluster_endpoint: tuple(hostname, port)
-          autodiscovery_interval: seconds to check for updates on cluster nodes
+          autodiscovery: activates / deactivates automatic cluster node update
+          interval: seconds to check for updates on cluster nodes, if autodiscovery is True
           hasher: object implementing functions ``get_node``, ``add_node``,
                   and ``remove_node``
 
-        Further arguments are interpreted as for :py:class:`.Client`
+        Further arguments are interpreted as for :py:class:`.HashClient`
         constructor.
         """
         
-        # connect to endpoint
-        self.endpoint = Client(server=endpoint, *args, **kwargs)
+        # create cluster client
+        super(AutodiscoveryClient, self).__init__(servers=[], hasher=hasher, *args, **kwargs)
+        
+        # init cluster params
+        self.endpoint = endpoint
+        self.cluster_version = 0
+        self.autodiscovery = autodiscovery
         self.interval = interval
         
-        # load current cluster version and nodes
-        (self.cluster_version, self.nodes) = self.get_cluster_nodes()
-        
-        logger.debug('Cluster version: %s', self.cluster_version)
-        logger.debug('Initial cluster nodes: %s',  self.nodes)
-        
-        self.client = HashClient(servers=self.nodes, hasher=hasher, *args, **kwargs)
-        
-        # start autodiscovery interval
-        self.check_cluster(False)
+        # start autodiscovery thread
+        self.check_cluster()
         
         
     def get_cluster_nodes(self):
     
-        cluster_info = None
-    
+        # connect to mgmt node
+        # this connection is not kept, as DNS resolution might point to another node
+        mgmt = Client(server=self.endpoint)
+        
         # check memcached version and obtain cluster info
-        mc_version = self.endpoint.version()
-        if StrictVersion(mc_version) >= StrictVersion('1.4.14'):
-            cluster_info = self.endpoint.config('cluster')
+        cluster_info = None
+        memcached_version = mgmt.version()
+        if StrictVersion(memcached_version) >= StrictVersion('1.4.14'):
+            cluster_info = mgmt.config('cluster')
         else:
-            cluster_info = self.endpoint.get('AmazonElastiCache:cluster')
+            cluster_info = mgmt.get('AmazonElastiCache:cluster')
         
         # parse cluster version and nodes
         splitter = re.compile(r'\r?\n')
         cluster = splitter.split(cluster_info)
         
-        cluster_version = cluster[1]
+        cluster_version = int(cluster[1])
         node_list = cluster[2].split(' ')
         servers = []
         for node in node_list:
@@ -80,32 +82,28 @@ class AutodiscoveryClient(object):
         return (cluster_version, servers)
         
         
-    def check_cluster(self, do_check=True):
+    def check_cluster(self):
     
-        threading.Timer(self.interval, self.check_cluster).start()
+        if self.autodiscovery:
+            threading.Timer(self.interval, self.check_cluster).start()
         
-        if do_check:
+        print('Checking cluster nodes..')
         
-            logger.debug('Checking cluster nodes..')
+        (new_version, new_nodes) = self.get_cluster_nodes()
+        if new_version != self.cluster_version:
             
-            (version, nodes) = self.get_cluster_nodes()
-            if version != self.cluster_version:
-                
-                logger.debug('Cluster version changed from %s to %s. Reloading nodes..',  
-                            version, self.cluster_version)
-                
-                self.cluster_version = version
-                
-                # check removed nodes
-                for node in self.nodes:
-                    if not node in nodes:
-                        logger.debug('Removing node from cluster: %s',  node)
-                        self.client.remove_server(node[0], node[1])
-                
-                # check new nodes
-                for node in nodes:
-                    if not node in self.nodes:
-                        logger.debug('Adding node to cluster: %s',  node)
-                        self.client.add_server(node[0], node[1])
-                        
-                self.nodes = nodes
+            print('Cluster version changed from %i to %i. Reloading nodes..',  
+                        self.cluster_version, new_version)
+            self.cluster_version = new_version
+            
+            # check removed nodes
+            for node in self.clients.keys():
+                if not node in new_nodes:
+                    print('Removing node from cluster: %s',  node)
+                    self.remove_server(node[0], node[1])
+            
+            # check new nodes
+            for node in new_nodes:
+                if not node in self.clients.keys():
+                    print('Adding node to cluster: %s',  node)
+                    self.add_server(node[0], node[1])
