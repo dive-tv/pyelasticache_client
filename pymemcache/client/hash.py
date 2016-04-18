@@ -226,6 +226,17 @@ class HashClient(object):
         return self._safely_run_func(
             client, func, default_val, *args, **kwargs
         )
+        
+    def _run_cmd_on_any(self, cmd, default_val, *args, **kwargs):
+    
+        client = self._get_client('')
+        if client is None:
+            return False
+
+        func = getattr(client, cmd)
+        return self._safely_run_func(
+            client, func, default_val, *args, **kwargs
+        )
 
     def set(self, key, *args, **kwargs):
         return self._run_cmd('set', key, False, *args, **kwargs)
@@ -331,6 +342,11 @@ class HashClient(object):
         for _, client in self.clients.items():
             self._safely_run_func(client, client.flush_all, False)
             
-    def config(self, key, *args, **kwargs):
-        return self._run_cmd('config', key, None, *args, **kwargs)
+    def config(self, subcmd, *args, **kwargs):
+        args = list(args)
+        args.insert(0, subcmd)
+        return self._run_cmd_on_any('config', None, *args, **kwargs)
+        
+    def version(self, *args, **kwargs):
+        return self._run_cmd_on_any('version', None, *args, **kwargs)
         
