@@ -621,7 +621,7 @@ class Client(object):
         Returns:
             The string returned by the config command.
         """
-        cmd = b"config get %b\r\n" % type
+        cmd = b"config get " + type + b"\r\n"
         result = self._config_cmd(cmd)
 
         if not result.startswith(b'CONFIG '):
