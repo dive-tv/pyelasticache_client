@@ -1,5 +1,5 @@
-pymemcache
-==========
+pymemcache-autodiscovery
+========================
 
 .. image:: https://travis-ci.org/pinterest/pymemcache.png
     :target: https://travis-ci.org/pinterest/pymemcache
@@ -11,30 +11,37 @@ pymemcache
         :target: http://pymemcache.readthedocs.org/en/latest/
         :alt: Master Documentation Status
 
-A comprehensive, fast, pure-Python memcached client.
+A comprehensive, fast, pure-Python memcached client with consistent key hashing 
+and node autodiscovery.
+Forked from the Pinterest pymemcache project:
 
-pymemcache supports the following features:
+https://github.com/pinterest/pymemcache
+
+
+pymemcache-autodiscovery supports the following features:
 
 * Complete implementation of the memcached text protocol.
 * Configurable timeouts for socket connect and send/recv calls.
 * Access to the "noreply" flag, which can significantly increase the speed of writes.
 * Flexible, simple approach to serialization and deserialization.
 * The (optional) ability to treat network and memcached errors as cache misses.
+* Optional use of Ketama hashing to consistently distribute cache keys on nodes.
+* Automatic cluster nodes autodiscovery and update through the "config cluster" option
 
-Installing pymemcache
-=====================
+Installing pymemcache-autodiscovery
+===================================
 
 Install from pip:
 
 .. code-block:: bash
 
-  pip install pymemcache
+  pip install pymemcache-autodiscovery
 
 For development, clone from github and run the tests with:
 
 .. code-block:: bash
 
-    git clone https://github.com/pinterest/pymemcache.git
+    git clone https://github.com/touchvie/pymemcache.git
     cd pymemcache
     python setup.py nosetests
 
@@ -90,6 +97,13 @@ Mixpanel's Blog post about their memcached client for Python:
 Mixpanel's pure Python memcached client:
   https://github.com/mixpanel/memcache_client
 
+Ketama hashing algorithm:
+  http://www.last.fm/user/RJ/journal/2007/04/10/rz_libketama_-_a_consistent_hashing_algo_for_memcache_clients
+
+Memcached autodiscovery feature:
+  http://docs.aws.amazon.com/AmazonElastiCache/latest/UserGuide/AutoDiscovery.AddingToYourClientLibrary.html
+
+
 Credits
 =======
 
@@ -110,3 +124,5 @@ Credits
 * `Adam Chainz <http://github.com/adamchainz>`_
 * `Ernest W. Durbin III <https://github.com/ewdurbin>`_
 * `Remco van Oosterhout <https://github.com/Vhab>`_
+* `David Fierro <https://github.com/davidfierro>`_
+* `Guillermo Menéndez <https://github.com/gmcorral>`_
