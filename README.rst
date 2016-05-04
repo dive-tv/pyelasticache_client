@@ -1,5 +1,5 @@
-pymemcache-autodiscovery
-========================
+pylasticache
+============
 
 .. image:: https://travis-ci.org/pinterest/pymemcache.png
     :target: https://travis-ci.org/pinterest/pymemcache
@@ -28,14 +28,14 @@ pymemcache-autodiscovery supports the following features:
 * Optional use of Ketama hashing to consistently distribute cache keys on nodes.
 * Automatic cluster nodes autodiscovery and update through the "config cluster" option
 
-Installing pymemcache-autodiscovery
-===================================
+Installing pylasticache
+=======================
 
 Install from pip:
 
 .. code-block:: bash
 
-  pip install pymemcache-autodiscovery
+  pip install pylasticache
 
 For development, clone from github and run the tests with:
 
@@ -126,3 +126,4 @@ Credits
 * `Remco van Oosterhout <https://github.com/Vhab>`_
 * `David Fierro <https://github.com/davidfierro>`_
 * `Guillermo Menéndez <https://github.com/gmcorral>`_
+* `N. Angulo <https://github.com/AnguloHerrera>`_
