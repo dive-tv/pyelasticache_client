@@ -106,7 +106,7 @@ class AutodiscoveryClient(HashClient):
                 if len(ip_port) == 2 and not (ip_port[0], ip_port[1]) in new_nodes:
                     logger.info('Removing node from cluster: %s',  node)
                     deleted_nodes.append(node)
-                    self.remove_server(ip_port[0], ip_port[1])
+                    self.remove_server(ip_port[0], int(ip_port[1]))
             
             # update client nodes
             for node in deleted_nodes:
@@ -117,5 +117,5 @@ class AutodiscoveryClient(HashClient):
                 node_str = node[0] + ":" + node[1]
                 if not node_str in self.clients.keys():
                     logger.info('Adding node to cluster: %s',  node)
-                    self.add_server(node[0], node[1])
+                    self.add_server(node[0], int(node[1]))
     
