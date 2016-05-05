@@ -1,15 +1,11 @@
-pymemcache-autodiscovery
+pyelasticache_client
 ========================
 
-.. image:: https://travis-ci.org/pinterest/pymemcache.png
-    :target: https://travis-ci.org/pinterest/pymemcache
+.. image:: https://travis-ci.org/touchvie/pyelasticache_client.svg?branch=master
+    :target: https://travis-ci.org/touchvie/pyelasticache_client
 
-.. image:: https://img.shields.io/pypi/v/pymemcache.svg
-    :target: https://pypi.python.org/pypi/pymemcache
-
-.. image:: https://readthedocs.org/projects/pymemcache/badge/?version=master
-        :target: http://pymemcache.readthedocs.org/en/latest/
-        :alt: Master Documentation Status
+.. image:: https://img.shields.io/pypi/v/pyelasticache_client.svg
+    :target: https://pypi.python.org/pypi/pyelasticache_client
 
 A comprehensive, fast, pure-Python memcached client with consistent key hashing 
 and node autodiscovery.
@@ -18,7 +14,7 @@ Forked from the Pinterest pymemcache project:
 https://github.com/pinterest/pymemcache
 
 
-pymemcache-autodiscovery supports the following features:
+pyelasticache_client supports the following features:
 
 * Complete implementation of the memcached text protocol.
 * Configurable timeouts for socket connect and send/recv calls.
@@ -28,21 +24,21 @@ pymemcache-autodiscovery supports the following features:
 * Optional use of Ketama hashing to consistently distribute cache keys on nodes.
 * Automatic cluster nodes autodiscovery and update through the "config cluster" option
 
-Installing pymemcache-autodiscovery
+Installing pyelasticache_client
 ===================================
 
 Install from pip:
 
 .. code-block:: bash
 
-  pip install pymemcache-autodiscovery
+  pip install pyelasticache_client
 
 For development, clone from github and run the tests with:
 
 .. code-block:: bash
 
-    git clone https://github.com/touchvie/pymemcache.git
-    cd pymemcache
+    git clone https://github.com/touchvie/pyelasticache_client.git
+    cd pyelasticache_client
     python setup.py nosetests
 
 Usage
@@ -126,3 +122,4 @@ Credits
 * `Remco van Oosterhout <https://github.com/Vhab>`_
 * `David Fierro <https://github.com/davidfierro>`_
 * `Guillermo Menéndez <https://github.com/gmcorral>`_
+* `Natalia Angulo <https://github.com/AnguloHerrera>`_
