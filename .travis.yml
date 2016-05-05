@@ -12,11 +12,19 @@ env:
   - TOXENV=py27
   - TOXENV=py33
   - TOXENV=py34
+  - TOXENV=py35
   - TOXENV=pypy
   - TOXENV=pypy3
 
 install:
   - travis_retry pip install tox
+
+addons:
+  apt:
+    sources:
+      - deadsnakes
+    packages:
+      - python3.5
 
 script:
   - travis_retry tox -- -m unit,integration
