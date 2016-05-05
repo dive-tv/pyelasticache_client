@@ -2,8 +2,8 @@ import socket
 import time
 import logging
 
-from pymemcache.client.base import Client, PooledClient, _check_key
-from pymemcache.client.rendezvous import RendezvousHash
+from pyelasticache_client.client.base import Client, PooledClient, _check_key
+from pyelasticache_client.client.rendezvous import RendezvousHash
 
 logger = logging.getLogger(__name__)
 

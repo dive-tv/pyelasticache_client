@@ -29,7 +29,7 @@ except Exception:
 
 
 try:
-    import pymemcache.client
+    import pyelasticache_client.client
     HAS_PYMEMCACHE = True
 except Exception:
     HAS_PYMEMCACHE = False
@@ -71,7 +71,7 @@ def test_memcache(host, port, size, count):
 
 @pytest.mark.benchmark()
 @pytest.mark.skipif(not HAS_PYMEMCACHE,
-                    reason="requires pymemcache")
+                    reason="requires pyelasticache_client")
 def test_pymemcache(host, port, size, count):
-    client = pymemcache.client.Client((host, port))
-    run_client_test('pymemcache', client, size, count)
+    client = pyelasticache_client.client.Client((host, port))
+    run_client_test('pyelasticache_client', client, size, count)

@@ -9,7 +9,7 @@ import time
 
 import six
 
-from pymemcache.exceptions import MemcacheIllegalInputError
+from pyelasticache_client.exceptions import MemcacheIllegalInputError
 
 
 class MockMemcacheClient(object):

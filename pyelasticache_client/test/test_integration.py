@@ -16,8 +16,8 @@ import json
 import pytest
 import six
 
-from pymemcache.client.base import Client
-from pymemcache.exceptions import (
+from pyelasticache_client.client.base import Client
+from pyelasticache_client.exceptions import (
     MemcacheIllegalInputError,
     MemcacheClientError
 )

@@ -2,9 +2,9 @@ import socket
 import time
 import logging
 
-from pymemcache.client.base import Client
-from pymemcache.client.hash import HashClient
-from pymemcache.client.consistenthasher import ConsistentHash
+from pyelasticache_client.client.base import Client
+from pyelasticache_client.client.hash import HashClient
+from pyelasticache_client.client.consistenthasher import ConsistentHash
 
 import re
 from distutils.version import StrictVersion

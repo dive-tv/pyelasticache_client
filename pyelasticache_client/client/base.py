@@ -18,9 +18,9 @@ import errno
 import socket
 import six
 
-from pymemcache import pool
+from pyelasticache_client import pool
 
-from pymemcache.exceptions import (
+from pyelasticache_client.exceptions import (
     MemcacheClientError,
     MemcacheUnknownCommandError,
     MemcacheIllegalInputError,
@@ -101,7 +101,7 @@ class Client(object):
      just calling encode on the string (using UTF-8, for instance).
 
      If you intend to use anything but str as a value, it is a good idea to use
-     a serializer and deserializer. The pymemcache.serde library has some
+     a serializer and deserializer. The pyelasticache_client.serde library has some
      already implemented serializers, including one that is compatible with
      the python-memcache library.
 

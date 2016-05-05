@@ -1,4 +1,4 @@
-from pymemcache.client.autodiscovery import AutodiscoveryClient
+from pyelasticache_client.client.autodiscovery import AutodiscoveryClient
 from .test_client import MockSocket
 
 import unittest

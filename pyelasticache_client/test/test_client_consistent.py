@@ -1,5 +1,5 @@
-from pymemcache.client.consistenthasher import ConsistentHash
-from pymemcache.client.hash import HashClient
+from pyelasticache_client.client.consistenthasher import ConsistentHash
+from pyelasticache_client.client.hash import HashClient
 
 from .test_client_hash import TestHashClient
 

@@ -19,8 +19,8 @@ import socket
 import unittest
 import pytest
 
-from pymemcache.client.base import PooledClient, Client
-from pymemcache.exceptions import (
+from pyelasticache_client.client.base import PooledClient, Client
+from pyelasticache_client.exceptions import (
     MemcacheClientError,
     MemcacheServerError,
     MemcacheUnknownCommandError,
@@ -28,8 +28,8 @@ from pymemcache.exceptions import (
     MemcacheIllegalInputError
 )
 
-from pymemcache import pool
-from pymemcache.test.utils import MockMemcacheClient
+from pyelasticache_client import pool
+from pyelasticache_client.test.utils import MockMemcacheClient
 
 
 class MockSocket(object):

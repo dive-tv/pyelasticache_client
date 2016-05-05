@@ -1,6 +1,6 @@
 import sys
 
-from pymemcache.client.ketama import ketama
+from pyelasticache_client.client.ketama import ketama
 from sortedcontainers import SortedDict
 
 class ConsistentHash(object):

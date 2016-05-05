@@ -1,7 +1,7 @@
-from pymemcache.client.hash import HashClient
-from pymemcache.client.base import Client, PooledClient
-from pymemcache.exceptions import MemcacheUnknownError
-from pymemcache import pool
+from pyelasticache_client.client.hash import HashClient
+from pyelasticache_client.client.base import Client, PooledClient
+from pyelasticache_client.exceptions import MemcacheUnknownError
+from pyelasticache_client import pool
 
 from .test_client import ClientTestMixin, MockSocket
 import unittest
@@ -9,7 +9,7 @@ import pytest
 import mock
 import socket
 
-from pymemcache.client.rendezvous import RendezvousHash
+from pyelasticache_client.client.rendezvous import RendezvousHash
 
 hasher = RendezvousHash
 
@@ -41,7 +41,7 @@ class TestHashClient(ClientTestMixin, unittest.TestCase):
         return client
 
     def test_setup_client_without_pooling(self):
-        with mock.patch('pymemcache.client.hash.Client') as internal_client:
+        with mock.patch('pyelasticache_client.client.hash.Client') as internal_client:
             client = HashClient([], timeout=999, key_prefix='foo_bar_baz', hasher=hasher)
             client.add_server('127.0.0.1', '11211')
 

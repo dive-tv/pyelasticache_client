@@ -1,7 +1,7 @@
 import six
 import pytest
 
-from pymemcache.test.utils import MockMemcacheClient
+from pyelasticache_client.test.utils import MockMemcacheClient
 
 
 @pytest.mark.unit()

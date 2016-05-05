@@ -1,4 +1,4 @@
-from pymemcache.client.rendezvous import RendezvousHash
+from pyelasticache_client.client.rendezvous import RendezvousHash
 import pytest
 
 

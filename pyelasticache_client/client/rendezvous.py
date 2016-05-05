@@ -1,4 +1,4 @@
-from pymemcache.client.murmur3 import murmur3_32
+from pyelasticache_client.client.murmur3 import murmur3_32
 
 
 class RendezvousHash(object):
