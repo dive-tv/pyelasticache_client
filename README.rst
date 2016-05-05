@@ -4,7 +4,9 @@ pyelasticache_client
 .. image:: https://travis-ci.org/touchvie/pyelasticache_client.svg?branch=master
     :target: https://travis-ci.org/touchvie/pyelasticache_client
     
-
+.. image:: https://img.shields.io/pypi/v/pyelasticache_client.svg
+    :target: https://pypi.python.org/pypi/pyelasticache_client
+ 
 A comprehensive, fast, pure-Python memcached client with consistent key hashing 
 and node autodiscovery.
 Forked from the Pinterest pymemcache project:
