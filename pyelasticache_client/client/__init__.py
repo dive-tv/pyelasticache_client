@@ -1,12 +1,12 @@
 # API Backwards compatibility
 
-from pymemcache.client.base import Client  # noqa
-from pymemcache.client.base import PooledClient  # noqa
+from pyelasticache_client.client.base import Client  # noqa
+from pyelasticache_client.client.base import PooledClient  # noqa
 
-from pymemcache.exceptions import MemcacheError  # noqa
-from pymemcache.exceptions import MemcacheClientError  # noqa
-from pymemcache.exceptions import MemcacheUnknownCommandError  # noqa
-from pymemcache.exceptions import MemcacheIllegalInputError  # noqa
-from pymemcache.exceptions import MemcacheServerError  # noqa
-from pymemcache.exceptions import MemcacheUnknownError  # noqa
-from pymemcache.exceptions import MemcacheUnexpectedCloseError  # noqa
+from pyelasticache_client.exceptions import MemcacheError  # noqa
+from pyelasticache_client.exceptions import MemcacheClientError  # noqa
+from pyelasticache_client.exceptions import MemcacheUnknownCommandError  # noqa
+from pyelasticache_client.exceptions import MemcacheIllegalInputError  # noqa
+from pyelasticache_client.exceptions import MemcacheServerError  # noqa
+from pyelasticache_client.exceptions import MemcacheUnknownError  # noqa
+from pyelasticache_client.exceptions import MemcacheUnexpectedCloseError  # noqa
