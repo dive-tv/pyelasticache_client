@@ -53,8 +53,8 @@ def pytest_generate_tests(metafunc):
         metafunc.parametrize("socket_module", socket_modules)
 
     if 'client_class' in metafunc.fixturenames:
-        from pymemcache.client.base import PooledClient, Client
-        from pymemcache.client.hash import HashClient
+        from pyelasticache_client.client.base import PooledClient, Client
+        from pyelasticache_client.client.hash import HashClient
 
         class HashClientSingle(HashClient):
             def __init__(self, server, *args, **kwargs):
