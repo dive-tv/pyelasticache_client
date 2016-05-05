@@ -12,7 +12,7 @@ Forked from the Pinterest pymemcache project:
 https://github.com/pinterest/pymemcache
 
 
-pymemcache-autodiscovery supports the following features:
+pyelasticache_client supports the following features:
 
 * Complete implementation of the memcached text protocol.
 * Configurable timeouts for socket connect and send/recv calls.
@@ -35,8 +35,8 @@ For development, clone from github and run the tests with:
 
 .. code-block:: bash
 
-    git clone https://github.com/touchvie/pymemcache.git
-    cd pymemcache
+    git clone https://github.com/touchvie/pyelasticache_client.git
+    cd pyelasticache_client
     python setup.py nosetests
 
 Usage
