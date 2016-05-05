@@ -1,15 +1,9 @@
-pyelasticache
-============
+pyelasticache_client
+====================
 
-.. image:: https://travis-ci.org/pinterest/pymemcache.png
-    :target: https://travis-ci.org/pinterest/pymemcache
-
-.. image:: https://img.shields.io/pypi/v/pymemcache.svg
-    :target: https://pypi.python.org/pypi/pymemcache
-
-.. image:: https://readthedocs.org/projects/pymemcache/badge/?version=master
-        :target: http://pymemcache.readthedocs.org/en/latest/
-        :alt: Master Documentation Status
+.. image:: https://travis-ci.org/touchvie/pyelasticache_client.svg?branch=master
+    :target: https://travis-ci.org/touchvie/pyelasticache_client
+    
 
 A comprehensive, fast, pure-Python memcached client with consistent key hashing 
 and node autodiscovery.
@@ -28,14 +22,14 @@ pymemcache-autodiscovery supports the following features:
 * Optional use of Ketama hashing to consistently distribute cache keys on nodes.
 * Automatic cluster nodes autodiscovery and update through the "config cluster" option
 
-Installing pyelasticache
-=======================
+Installing pyelasticache_client
+===============================
 
 Install from pip:
 
 .. code-block:: bash
 
-  pip install pyelasticache
+  pip install pyelasticache_client
 
 For development, clone from github and run the tests with:
 
