@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import os
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
@@ -10,8 +10,8 @@ readme = read('README.rst')
 
 setup(
   name = 'pyelasticache_client',
-  packages = ['pyelasticache_client'],
-  version = '0.1',
+  packages=find_packages(),
+  version = '0.1.1',
   install_requires=['six', 'sortedcontainers'],
   description = 'A comprehensive, fast, pure Python memcached client',
   long_description=readme,
