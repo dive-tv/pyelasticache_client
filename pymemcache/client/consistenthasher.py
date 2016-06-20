@@ -58,7 +58,6 @@ class ConsistentHash(object):
                 for h in range(0, 4):
                     k = self.hash_function(self.get_key(node, i), h)
                     tmp_dict[k] = node
-                    #print ('Adding node ' + node + ' in position ' + str(k))
         
         self.continuum = tmp_dict;
   

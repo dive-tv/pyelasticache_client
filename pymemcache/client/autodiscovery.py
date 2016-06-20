@@ -50,7 +50,8 @@ class AutodiscoveryClient(HashClient):
         self.cluster_version = 0
         self.autodiscovery = autodiscovery
         self.interval = interval
-        
+        self.timer = None
+
         # start autodiscovery thread
         self.check_cluster()
         
@@ -87,9 +88,6 @@ class AutodiscoveryClient(HashClient):
         
     def check_cluster(self):
     
-        if self.autodiscovery:
-            threading.Timer(self.interval, self.check_cluster).start()
-        
         logger.debug('Checking cluster nodes..')
         
         (new_version, new_nodes) = self.get_cluster_nodes()
@@ -118,4 +116,16 @@ class AutodiscoveryClient(HashClient):
                 if not node_str in self.clients.keys():
                     logger.info('Adding node to cluster: %s',  node)
                     self.add_server(node[0], int(node[1]))
+
+        if self.autodiscovery:
+            self.timer = threading.Timer(self.interval, self.check_cluster)
+            self.timer.start()
+        
     
+    def close(self):
+
+        if self.autodiscovery and self.timer is not None:
+            self.timer.cancel()
+            self.timer = None
+            self.autodiscovery = False
+            logger.info('Autodiscovery thread stopped')
