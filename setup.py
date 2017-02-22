@@ -21,7 +21,7 @@ setup(
     long_description=readme + '\n' + changelog,
     license='Apache License 2.0',
     keywords = ['AWS', 'elasticache', 'memcached', 'autodiscovery'],
-    url='https://github.com/touchvie/pyelasticache_client',
+    url='https://github.com/dive-tv/pyelasticache_client',
     classifiers=[
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.6',
